@@ -3,6 +3,7 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { AddBook } from './components/AddBook';
 import { Container, Navbar, Row, Col } from "react-bootstrap";
+import { BookList } from './components/BookList';
 
 function App() {
   return (
@@ -23,7 +24,7 @@ function App() {
       <Container>
         <Row>
           <Col>
-            {/* <BooksList getBookId={getBookIdHandler} /> */}
+            <BookList />
           </Col>
         </Row>
       </Container>
