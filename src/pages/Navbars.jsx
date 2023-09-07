@@ -9,6 +9,7 @@ export const Navbars = () => {
   const linkStyle = {
     color: "white",
     textDecoration: "none",
+    marginLeft:"50px"
   };
 
   const handleLogOut = async () => {
