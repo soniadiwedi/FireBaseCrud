@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Form, Button, ButtonGroup, InputGroup, Alert } from "react-bootstrap";
-import { addBook } from "../services/bookServices";
-export const AddBook = () => {
+import { addBook, getBook, updateBook } from "../services/bookServices";
+export const AddBook = ({ bookId, setBookId }) => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [status, setStatus] = useState("Available");
@@ -14,13 +14,45 @@ export const AddBook = () => {
       setMessage({ error: true, msg: "Fiels are empty" });
     }
     const newBook = { title, author, status };
-    addBook(newBook);
-    setMessage({ error: false, msg: "Book is created" });
+
+    try {
+      if (bookId !== undefined && bookId !== "") {
+        await updateBook(bookId, newBook);
+        setBookId("")
+        setMessage({ error: false, msg: "Book is Updated" });
+        
+      } else {
+        await addBook(newBook);
+        setMessage({ error: false, msg: "Book is created" });
+       
+      }
+    } catch (err) {
+      setMessage({ error: true, msg: err.message });
+    }
     setTitle("");
     setAuthor("");
     console.log(newBook);
   };
 
+  // Editing
+  const editHandler = async () => {
+    setMessage("");
+    try {
+      const res = await getBook(bookId);
+      console.log("the record is :", res);
+      setTitle(res.data().title);
+      setAuthor(res.data().author);
+      setStatus(res.data().status);
+    } catch (err) {
+      setMessage({ error: true, msg: err.message });
+    }
+  };
+  useEffect(() => {
+    console.log("the id here is", bookId);
+    if (bookId !== undefined && bookId !== "") {
+      editHandler();
+    }
+  }, [bookId]);
   return (
     <div>
       {message?.msg && (
